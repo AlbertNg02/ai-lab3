@@ -34,17 +34,18 @@ def read_sensor_data(filename, debug: bool):
         m1, m2, sound_r, sound_c = map(int, data)
         for r in range(board_r):
             for c in range(board_c):
-                P_l = L_CPT.get_single_prob(0, 0)
-                total_sum = 0
-                # total_sum = calculate_prob_c_given_m1_m2_s(L_CPT, C_CPT, M_CPT, S_CPT, r, c, m1, m2, sound_r, sound_c,
-                #                                            board)
-                for L_cords in utils.generate_one_manhattan_away(r, c, board):
-                    p_c_given_l = C_CPT.get_single_prob(L_cords[0], L_cords[1], r, c)
-                    p_m1_given_c = Decimal(M_CPT.get_single_prob_m1(r, c, m1))
-                    p_m2_given_c = Decimal(M_CPT.get_single_prob_m2(r, c, m2))
-                    p_s_given_c = Decimal(S_CPT.get_single_prob(sound_r, sound_c, r, c))
-                    partial_sum = P_l * p_c_given_l * p_m1_given_c * p_m2_given_c * p_s_given_c
-                    total_sum += partial_sum
+                # P_l = L_CPT.get_single_prob(0, 0)
+                # total_sum = 0
+                total_sum = calculate_prob_c_given_m1_m2_s(L_CPT, C_CPT, M_CPT, S_CPT, r, c, m1, m2, sound_r, sound_c,
+                                                           board)
+
+                # for L_cords in utils.generate_one_manhattan_away(r, c, board):
+                #     p_c_given_l = C_CPT.get_single_prob(L_cords[0], L_cords[1], r, c)
+                #     p_m1_given_c = Decimal(M_CPT.get_single_prob_m1(r, c, m1))
+                #     p_m2_given_c = Decimal(M_CPT.get_single_prob_m2(r, c, m2))
+                #     p_s_given_c = Decimal(S_CPT.get_single_prob(sound_r, sound_c, r, c))
+                #     partial_sum = P_l * p_c_given_l * p_m1_given_c * p_m2_given_c * p_s_given_c
+                #     total_sum += partial_sum
 
                 total_sum = total_sum
                 board.grid[r][c] = total_sum
@@ -53,7 +54,7 @@ def read_sensor_data(filename, debug: bool):
             board.print_grid()
         board.print_grid_normalised()
 
-        # TODO: Enabling this breaks the code
+        # TODO: Enabling this breaks the code.  the CPT for L uses the CPT for C from timestep n-1. then you use L to compute a new C
         # L_CPT.CPT = C_CPT.CPT
 
         # TODO: Use new L co compute C
