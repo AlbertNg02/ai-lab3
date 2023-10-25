@@ -1,68 +1,70 @@
 from Classes import *
 
-from debug import *
 from decimal import *
 getcontext().prec = 8
 
 
 def read_sensor_data(filename, debug: bool):
+    debug_logs = debug
     with open(filename, 'r') as file:
         lines = file.readlines()
 
     # Extract grid size from the first line
     grid_size = lines[0].split()
-    board_r, board_c = int(grid_size[0]), int(grid_size[1])
 
     # Initialize an empty grid
-    board = Board(board_r, board_c)
-    # grid.print_grid()
-    if debug:
-        debug_start(board)
+    board = Board(int(grid_size[0]), int(grid_size[1]))
 
-    L_CPT = L(board)
-    L_CPT.generate_CPT(debug)
-    C_CPT = C(board)
-    C_CPT.generate_CPT(debug)
-    M_CPT = M(board)
-    M_CPT.generate_CPT(debug)
-    S_CPT = S(board)
-    S_CPT.generate_CPT(debug)
+    l_main = L(board)
+    l_main.generate_CPT(debug)
+
+    c_main = C(board)
+    c_main.generate_CPT(debug)
+
+    m_main = M(board)
+    m_main.generate_CPT(debug)
+
+    s_main = S(board)
+    s_main.generate_CPT(debug)
+
+    print("\nInitial distribution of monkey's last location")
+    board.print_board()
 
     # Process sensor data from subsequent lines
     for i in range(1, len(lines)):
+        time_step = i - 1
         data = lines[i].split()
         m1, m2, sound_r, sound_c = map(int, data)
-        for r in range(board_r):
-            for c in range(board_c):
-                # P_l = L_CPT.get_single_prob(0, 0)
-                # total_sum = 0
-                total_sum = calculate_prob_c_given_m1_m2_s(L_CPT, C_CPT, M_CPT, S_CPT, r, c, m1, m2, sound_r, sound_c,
-                                                           board)
-
-                # for L_cords in utils.generate_one_manhattan_away(r, c, board):
-                #     p_c_given_l = C_CPT.get_single_prob(L_cords[0], L_cords[1], r, c)
-                #     p_m1_given_c = Decimal(M_CPT.get_single_prob_m1(r, c, m1))
-                #     p_m2_given_c = Decimal(M_CPT.get_single_prob_m2(r, c, m2))
-                #     p_s_given_c = Decimal(S_CPT.get_single_prob(sound_r, sound_c, r, c))
-                #     partial_sum = P_l * p_c_given_l * p_m1_given_c * p_m2_given_c * p_s_given_c
-                #     total_sum += partial_sum
-
-                total_sum = total_sum
+        for r in range(board.r):
+            for c in range(board.c):
+                total_sum = calculate_prob_c_given_m1_m2_s(l_main, c_main, m_main,s_main, r, c, m1, m2, sound_r, sound_c,
+                                           board)
                 board.grid[r][c] = total_sum
 
-        if debug:
-            board.print_grid()
-        board.print_grid_normalised()
+        if debug or debug_logs:
+            print("Observation: Motion1: {}, Motion2: {}, Sound Location({}, {})".format(m1, m2, sound_r, sound_c))
+            #TODO Debugging info
+            print("Monkey's predicted current location at time step: {}".format(time_step))
+            for rc in range(board.r):
+                for cc in range(board.c):
+                    print("Calculating total prob for current location ({}, {})".format(rc, cc))
+                    for rl in range(board.r):
+                        for cl in range(board.c):
+                            print("    Probs being multiplied for last location: ({}, {}): {} {} {} {} {}".format(rl, cl, l_main.get_single_prob(rl,cl), c_main.get_single_prob(rl,cl,rc,cc), m_main.get_single_prob_m1(rl,cl,m1), m_main.get_single_prob_m2(rl,cl,m2),s_main.get_single_prob(sound_r,sound_c,rc,cc)))
 
-        # TODO: Enabling this breaks the code.  the CPT for L uses the CPT for C from timestep n-1. then you use L to compute a new C
-        # L_CPT.CPT = C_CPT.CPT
+            board.print_board()
 
-        # TODO: Use new L co compute C
-        # C_CPT = C(grid)
-        # C_CPT.get_CPT(debug)
 
-        # TODO: Unsure of whether we need this or not
-        # board.board_clear()
+        board.grid_normalised()
+        print("---------------------------------------")
+        debug = 0
+        # print(board.grid)
+
+        # Copy C to L
+        l_main.CPT = utils.new_L_CPT(board)
+
+
+
 
 
 
@@ -72,6 +74,6 @@ def read_sensor_data(filename, debug: bool):
 if __name__ == "__main__":
     # filename = input("Enter the filename: ")
     # debug = int(input("Enter debug boolean: 0 or 1"))
-    debug = bool(False)
+    debug = bool(int(input("Debug: 0 or 1 ")))
     filename = "m1-input.txt"
     grid = read_sensor_data(filename, debug)

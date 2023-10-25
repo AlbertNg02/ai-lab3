@@ -91,6 +91,19 @@ def calculate_prob_c_given_m1_m2_s(L_CPT, C_CPT, M_CPT, S_CPT, r, c, m1, m2, sou
 
 
 
+def new_L_CPT(board: Board):
+
+    new_L_CPT = {}
+
+    for r in range(board.r):
+        for c in range(board.c):
+            new_L_CPT[(r,c)] = board.grid[r][c]
+    print("")
+
+    return new_L_CPT
+
+
+
 # def generate_heat_map(grid):
 #     # Create a dataset
 #     df = pd.DataFrame(np.random.random((5, 5)), columns=["a", "b", "c", "d", "e"])

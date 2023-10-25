@@ -3,31 +3,32 @@ class Board:
     def __init__(self, r, c):
         self.r = r
         self.c = c
-        self.grid = [[0 for _ in range(r)] for _ in range(c)]
+        self.single_cell_prob = 1/(self.r * self.c)
+        self.grid = [[ self.single_cell_prob for _ in range(r)] for _ in range(c)]
 
     def board_size(self):
         elements = self.r * self.c
         return elements
 
-    def print_grid(self):
-        print("\n---grid---")
+    def print_board(self):
+        print("---board---")
         for row in self.grid:
             print(" ".join(map(str, row)))
+        print("")
 
-    def print_grid_normalised(self):
-        self.norm_board = copy.deepcopy(self.grid)
-        total_sum = sum(sum(row) for row in self.norm_board)  # Calculate the sum of all values in the grid
+
+    def grid_normalised(self):
+        self.norm_grid = copy.deepcopy(self.grid)
+        total_sum = sum(sum(row) for row in self.norm_grid)  # Calculate the sum of all values in the grid
 
         # Normalize and update the values in the grid
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
-                self.norm_board[i][j] /= total_sum
+                self.norm_grid[i][j] /= total_sum
 
-        print("\n---normallized_board---")
-        for row in self.norm_board:
+        print("---normallized_board---")
+        for row in self.norm_grid:
             print(" ".join(map(str, row)))
-        # self.grid = self.norm_board
+        self.grid = self.norm_grid
 
-    def board_clear(self):
-        self.grid = [[0 for _ in range(self.r)] for _ in range(self.c)]
 

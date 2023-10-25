@@ -7,7 +7,6 @@ getcontext().prec = 8
 class M:
     def __init__(self, board: Board):
         self.board = board
-        self.probability_array = [[0 for x in range(self.board.c)] for y in range(self.board.r)]
         self.M1_CPT = {}
         self.M2_CPT = {}
 
@@ -42,10 +41,9 @@ class M:
             print("Current location {}, true prob: {}, false prob: {} ".format(loc, prob, Decimal(1) - Decimal(prob)))
 
     def generate_CPT(self, debug):
-        elements = Decimal(self.board.board_size())
-        # location_prob = Decimal(1) / elements
         for r in range(self.board.r):
             for c in range(self.board.c):
+                # TODO: Check logic first iteration should always equal to 1
                 self.M1_CPT[(r, c)] = self.get_CPT_M1(r, c)
                 self.M2_CPT[(r, c)] = self.get_CPT_M2(r, c)
 
@@ -55,12 +53,16 @@ class M:
 
     def get_single_prob_m1(self, r, c, m1):
         if m1:
-            return Decimal(self.M1_CPT[(r, c)])
+            m1_true = Decimal(self.M1_CPT[(r, c)])
+            return m1_true
         else:
-            return Decimal((1-self.M1_CPT[(r, c)]))
+            m1_false = Decimal(1) - Decimal(self.M1_CPT[(r, c)])
+            return m1_false
 
     def get_single_prob_m2(self, r, c, m2):
         if m2:
-            return Decimal(self.M2_CPT[(r, c)])
+            m2_true = Decimal(self.M2_CPT[(r, c)])
+            return m2_true
         else:
-            return Decimal((1-self.M2_CPT[(r, c)]))
+            m2_false = Decimal(1) - Decimal(self.M2_CPT[(r, c)])
+            return m2_false
