@@ -3,15 +3,15 @@ from .utils import *
 from decimal import *
 getcontext().prec = 8
 
+
 class M:
     def __init__(self, board: Board):
         self.board = board
         self.probability_array = [[0 for x in range(self.board.c)] for y in range(self.board.r)]
+        self.M1_CPT = {}
+        self.M2_CPT = {}
 
-
-
-
-    def get_probability_M1(self, r, c):
+    def get_CPT_M1(self, r, c):
         prob = 0.05
 
         if r == 0 and c == 0:
@@ -23,40 +23,44 @@ class M:
 
         return max(0.05, prob)
 
-    def get_probability_M2(self, r, c):
+    def get_CPT_M2(self, r, c):
         prob = 0.05
-        if r == (self.board.r-1) and c == (self.board.c-1):
+        if r == (self.board.r - 1) and c == (self.board.c - 1):
             prob = 0.9
-        if r == (self.board.r-1):
+        if r == (self.board.r - 1):
             distance = self.board.c - c - 1
             prob = 0.9 - (0.1 * distance)
-        elif c == (self.board.c-1):
+        elif c == (self.board.c - 1):
             distance = self.board.r - r - 1
             prob = 0.9 - (0.1 * distance)
 
         return max(0.05, prob)
 
-    def print_probability(self, probs: list, monitor_number):
+    def print_probability(self, probs: dict, monitor_number):
         print("\nMotion sensor {} distribution".format(monitor_number))
-        for prob in probs:
-            print("Current location {}, true prob: {}, false prob: {} ".format( prob["loc"], prob["prob"], Decimal(1) - Decimal(prob["prob"])))
+        for loc, prob in probs.items():
+            print("Current location {}, true prob: {}, false prob: {} ".format(loc, prob, Decimal(1) - Decimal(prob)))
 
-
-
-
-
-    def get_probability(self):
+    def generate_CPT(self, debug):
         elements = Decimal(self.board.board_size())
-        M1_probs = []
-        M2_probs = []
         # location_prob = Decimal(1) / elements
         for r in range(self.board.r):
             for c in range(self.board.c):
-                # self.probability_array[r][c] = location_prob
-                M1_probs.append({"prob":self.get_probability_M1(r, c), "loc": (r,c)})
-                M2_probs.append({"prob":self.get_probability_M2(r, c), "loc": (r,c)})
+                self.M1_CPT[(r, c)] = self.get_CPT_M1(r, c)
+                self.M2_CPT[(r, c)] = self.get_CPT_M2(r, c)
 
-        print(self.print_probability(M1_probs, "#1 (top left)"))
-        print(self.print_probability(M2_probs, "#2 (bottom right)"))
+        if debug:
+            print(self.print_probability(self.M1_CPT, "#1 (top left)"))
+            print(self.print_probability(self.M2_CPT, "#2 (bottom right)"))
 
+    def get_single_prob_m1(self, r, c, m1):
+        if m1:
+            return Decimal(self.M1_CPT[(r, c)])
+        else:
+            return Decimal((1-self.M1_CPT[(r, c)]))
 
+    def get_single_prob_m2(self, r, c, m2):
+        if m2:
+            return Decimal(self.M2_CPT[(r, c)])
+        else:
+            return Decimal((1-self.M2_CPT[(r, c)]))

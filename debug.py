@@ -9,12 +9,12 @@ from Classes import *
 
 def debug_start(board: Board):
     L_CPT = L(board)
-    L_CPT.get_probability()
+    L_CPT.generate_CPT()
     C_CPT = C(board)
-    C_CPT.get_probability()
+    C_CPT.generate_CPT()
     M_CPT = M(board)
-    M_CPT.get_probability()
+    M_CPT.generate_CPT()
     S_CPT = S(board)
-    S_CPT.get_probability()
+    S_CPT.generate_CPT()
 
 
