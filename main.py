@@ -71,8 +71,7 @@ def read_sensor_data(filename, debug: bool):
 
 if __name__ == "__main__":
     clear_heatmap_folder()
-    # filename = input("Enter the filename: ")
-    # debug = int(input("Enter debug boolean: 0 or 1"))
+    filename = input("Enter the filename: ")
+    # filename = "m4-input.txt"
     debug = bool(int(input("Debug: 0 or 1 ")))
-    filename = "m3-input.txt"
     grid = read_sensor_data(filename, debug)
