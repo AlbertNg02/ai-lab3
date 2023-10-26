@@ -1,6 +1,8 @@
-# import seaborn as sns
-# import pandas as pd
-# import numpy as np
+import pip
+import os
+import seaborn as sns
+import pandas as pd
+import numpy as np
 from Classes import *
 from decimal import *
 getcontext().prec = 8
@@ -63,13 +65,41 @@ def new_L_CPT(board: Board):
 
 
 
-# def generate_heat_map(grid):
-#     # Create a dataset
-#     df = pd.DataFrame(np.random.random((5, 5)), columns=["a", "b", "c", "d", "e"])
-#
-#     # Default heatmap
-#     p1 = sns.heatmap(df)
-#     p1
-#     p1.get_figure().savefig("heatmap.png")
-#
-# generate_heat_map(0)
+def clear_heatmap_folder():
+    # Get the root directory of your project
+    root_directory = os.path.dirname(__file__)
+
+    # Create the output folder path relative to the project's root
+    output_folder = os.path.join(root_directory, 'heatmaps')
+
+    # Ensure the output folder exists
+    os.makedirs(output_folder, exist_ok=True)
+    print("OUTPUTFOLDER IS ", output_folder)
+
+    # Delete all files in the output folder
+    for filename in os.listdir(output_folder):
+        file_path = os.path.join(output_folder, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+
+
+def generate_heat_map(filename, grid, time_step):
+    grid = [[float(val) for val in row] for row in grid]
+    df = pd.DataFrame(grid)
+    p = sns.heatmap(df).set_title("Bayes Net prediction of monkey's location")
+
+    # Get the root directory of your project
+    root_directory = os.path.dirname(__file__)
+
+    # Create the output folder path relative to the project's root
+    output_folder = os.path.join(root_directory, 'heatmaps')
+
+    # Ensure the output folder exists
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Save the heatmap in the correct folder
+    file_path = os.path.join(output_folder, "heatmap_timestep_{}_file_{}.png".format(time_step, filename))
+    p.get_figure().savefig(file_path)
+    p.get_figure().clf()
+

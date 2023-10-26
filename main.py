@@ -43,6 +43,7 @@ def read_sensor_data(filename, debug: bool):
                                            board)
                 board.grid[r][c] = total_sum
 
+
         print("Observation: Motion1: {}, Motion2: {}, Sound Location({}, {})".format(m1, m2, sound_r, sound_c))
         if debug or debug_logs:
             print("Monkey's predicted current location at time step: {}".format(time_step))
@@ -57,9 +58,9 @@ def read_sensor_data(filename, debug: bool):
 
 
         board.grid_normalised()
+        generate_heat_map(filename, board.grid, time_step)
         print("---------------------------------------")
         debug = 0
-        # print(board.grid)
 
         # Copy C to L
         l_main.CPT = utils.new_L_CPT(board)
@@ -69,8 +70,9 @@ def read_sensor_data(filename, debug: bool):
 
 
 if __name__ == "__main__":
+    clear_heatmap_folder()
     # filename = input("Enter the filename: ")
     # debug = int(input("Enter debug boolean: 0 or 1"))
     debug = bool(int(input("Debug: 0 or 1 ")))
-    filename = "m4-input.txt"
+    filename = "m3-input.txt"
     grid = read_sensor_data(filename, debug)
