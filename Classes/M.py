@@ -43,7 +43,6 @@ class M:
     def generate_CPT(self, debug):
         for r in range(self.board.r):
             for c in range(self.board.c):
-                # TODO: Check logic first iteration should always equal to 1
                 self.M1_CPT[(r, c)] = self.get_CPT_M1(r, c)
                 self.M2_CPT[(r, c)] = self.get_CPT_M2(r, c)
 
@@ -53,38 +52,12 @@ class M:
 
     def get_single_prob_m1(self, r, c, m1):
 
-        # if (r == 0 or c == 0) and m1 == True:
-        #     correct_sensor = True
-        # elif (r != 0 and c != 0) and m1 == False:
-        #     correct_sensor = True
-        # else:
-        #     correct_sensor = False
-        #
-        # if correct_sensor:
-        #     m1_true = Decimal(self.M1_CPT[(r, c)])
-        #     return m1_true
-        # else:
-        #     m1_false = Decimal(1) - Decimal(self.M1_CPT[(r, c)])
-        #     return m1_false
         if m1:
             return (Decimal(self.M1_CPT[(r,c)]))
         else:
             return 1 - (Decimal(self.M1_CPT[(r,c)]))
 
     def get_single_prob_m2(self, r, c, m2):
-        # if (r == self.board.r - 1 or c == self.board.c - 1) and m2 == True:
-        #     correct_sensor = True
-        # elif (r != self.board.r - 1 and c != self.board.c - 1) and m2 == False:
-        #     correct_sensor = True
-        # else:
-        #     correct_sensor = False
-        #
-        # if correct_sensor:
-        #     m2_true = Decimal(self.M2_CPT[(r, c)])
-        #     return m2_true
-        # else:
-        #     m2_false = Decimal(1) - Decimal(self.M2_CPT[(r, c)])
-        #     return m2_false
         if m2:
             return (Decimal(self.M2_CPT[(r,c)]))
         else:

@@ -5,13 +5,7 @@ from Classes import *
 from decimal import *
 getcontext().prec = 8
 
-# TODO: Create a function to generate a list of all possible (r, c) locations on the grid.
-def generate_all_locations(board: Board):
-    # m, n = grid.board_size()
-    pass
 
-
-# TODO: Develop a function to generate a list of all possible (r, c) locations one Manhattan-step away from a given location.
 def generate_one_manhattan_away(r, c, board):
     max_rows = board.r
     max_cols = board.c
@@ -25,7 +19,6 @@ def generate_one_manhattan_away(r, c, board):
     return possible_locations
 
 
-# TODO: Implement a function to generate a list of all possible (r, c) locations two Manhattan-steps away from a given location.
 def generate_two_manhattan_away(r, c, board: Board):
     max_rows = board.r
     max_cols = board.c
@@ -44,7 +37,6 @@ def generate_two_manhattan_away(r, c, board: Board):
 
 def calculate_prob_c_given_m1_m2_s(L_CPT, C_CPT, M_CPT, S_CPT, r, c, m1, m2, sound_r, sound_c, board):
 
-    # TODO: Albert you should have never used this EVER EVER EVER
     total_sum = 0
     for L_cords in generate_one_manhattan_away(r, c, board):
         p_l = L_CPT.get_single_prob(L_cords[0], L_cords[1])

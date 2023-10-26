@@ -20,14 +20,11 @@ class C:
         if debug:
             print("Current location distribution:")
 
-
-        # TODO: only works for first iteration
         for rl in range(self.board.r):
             for cl in range(self.board.c):
                 self.CPT[(rl,cl,rl,cl)] = 0
                 possible_move_list = generate_one_manhattan_away(rl, cl, self.board)
 
-                # TODO: Question the logic
                 location_prob = Decimal(1) / Decimal(len(possible_move_list))
 
                 if debug:

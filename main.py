@@ -43,8 +43,8 @@ def read_sensor_data(filename, debug: bool):
                                            board)
                 board.grid[r][c] = total_sum
 
+        print("Observation: Motion1: {}, Motion2: {}, Sound Location({}, {})".format(m1, m2, sound_r, sound_c))
         if debug or debug_logs:
-            print("Observation: Motion1: {}, Motion2: {}, Sound Location({}, {})".format(m1, m2, sound_r, sound_c))
             print("Monkey's predicted current location at time step: {}".format(time_step))
             for rc in range(board.r):
                 for cc in range(board.c):
@@ -65,10 +65,6 @@ def read_sensor_data(filename, debug: bool):
         l_main.CPT = utils.new_L_CPT(board)
 
 
-
-
-
-
     return 0
 
 
@@ -76,5 +72,5 @@ if __name__ == "__main__":
     # filename = input("Enter the filename: ")
     # debug = int(input("Enter debug boolean: 0 or 1"))
     debug = bool(int(input("Debug: 0 or 1 ")))
-    filename = "m2-input.txt"
+    filename = "m4-input.txt"
     grid = read_sensor_data(filename, debug)
