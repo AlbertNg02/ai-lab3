@@ -56,7 +56,6 @@ class S:
                     print("Current Location: ({}, {})".format(r, c))
                     print("    Sound reported at {}, prob: {} ".format((r,c), self.CPT.get((r,c,r,c))))
 
-                # print("    Sound reported at ({}, {}), prob: {}".format(correct[0], correct[1], self.CPT[(r,c,r,c)]))
                 possible_one_move_list = generate_one_manhattan_away(r, c, self.board)
                 possible_two_move_list = generate_two_manhattan_away(r, c, self.board)
 
@@ -70,6 +69,11 @@ class S:
                     if debug:
                         print("    Sound reported at {}, prob: {} ".format(possible_move, prob))
                     self.CPT[(possible_move[0], possible_move[1], r, c)] = prob
+
+                for rr in range(self.board.r):
+                    for cc in range(self.board.c):
+                        if (r,c,rr,cc) not in self.CPT:
+                            self.CPT[(r,c,rr,cc)] = 0
 
     def get_single_prob(self, rs, cs, rc, cc):
         return self.CPT[(rs, cs, rc, cc)]

@@ -1,6 +1,7 @@
 from .board import Board
 from .utils import *
 from decimal import *
+
 getcontext().prec = 8
 
 
@@ -12,7 +13,6 @@ class M:
 
     def get_CPT_M1(self, r, c):
         prob = 0.05
-
         if r == 0 and c == 0:
             prob = 0.9
         elif r == 0:
@@ -26,7 +26,7 @@ class M:
         prob = 0.05
         if r == (self.board.r - 1) and c == (self.board.c - 1):
             prob = 0.9
-        if r == (self.board.r - 1):
+        elif r == (self.board.r - 1):
             distance = self.board.c - c - 1
             prob = 0.9 - (0.1 * distance)
         elif c == (self.board.c - 1):
@@ -52,17 +52,41 @@ class M:
             print(self.print_probability(self.M2_CPT, "#2 (bottom right)"))
 
     def get_single_prob_m1(self, r, c, m1):
+
+        # if (r == 0 or c == 0) and m1 == True:
+        #     correct_sensor = True
+        # elif (r != 0 and c != 0) and m1 == False:
+        #     correct_sensor = True
+        # else:
+        #     correct_sensor = False
+        #
+        # if correct_sensor:
+        #     m1_true = Decimal(self.M1_CPT[(r, c)])
+        #     return m1_true
+        # else:
+        #     m1_false = Decimal(1) - Decimal(self.M1_CPT[(r, c)])
+        #     return m1_false
         if m1:
-            m1_true = Decimal(self.M1_CPT[(r, c)])
-            return m1_true
+            return (Decimal(self.M1_CPT[(r,c)]))
         else:
-            m1_false = Decimal(1) - Decimal(self.M1_CPT[(r, c)])
-            return m1_false
+            return 1 - (Decimal(self.M1_CPT[(r,c)]))
 
     def get_single_prob_m2(self, r, c, m2):
+        # if (r == self.board.r - 1 or c == self.board.c - 1) and m2 == True:
+        #     correct_sensor = True
+        # elif (r != self.board.r - 1 and c != self.board.c - 1) and m2 == False:
+        #     correct_sensor = True
+        # else:
+        #     correct_sensor = False
+        #
+        # if correct_sensor:
+        #     m2_true = Decimal(self.M2_CPT[(r, c)])
+        #     return m2_true
+        # else:
+        #     m2_false = Decimal(1) - Decimal(self.M2_CPT[(r, c)])
+        #     return m2_false
         if m2:
-            m2_true = Decimal(self.M2_CPT[(r, c)])
-            return m2_true
+            return (Decimal(self.M2_CPT[(r,c)]))
         else:
-            m2_false = Decimal(1) - Decimal(self.M2_CPT[(r, c)])
-            return m2_false
+            return 1 - (Decimal(self.M2_CPT[(r,c)]))
+

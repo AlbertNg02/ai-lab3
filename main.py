@@ -35,6 +35,8 @@ def read_sensor_data(filename, debug: bool):
         time_step = i - 1
         data = lines[i].split()
         m1, m2, sound_r, sound_c = map(int, data)
+        m1 = bool(m1)
+        m2 = bool(m2)
         for r in range(board.r):
             for c in range(board.c):
                 total_sum = calculate_prob_c_given_m1_m2_s(l_main, c_main, m_main,s_main, r, c, m1, m2, sound_r, sound_c,
@@ -43,14 +45,13 @@ def read_sensor_data(filename, debug: bool):
 
         if debug or debug_logs:
             print("Observation: Motion1: {}, Motion2: {}, Sound Location({}, {})".format(m1, m2, sound_r, sound_c))
-            #TODO Debugging info
             print("Monkey's predicted current location at time step: {}".format(time_step))
             for rc in range(board.r):
                 for cc in range(board.c):
                     print("Calculating total prob for current location ({}, {})".format(rc, cc))
                     for rl in range(board.r):
                         for cl in range(board.c):
-                            print("    Probs being multiplied for last location: ({}, {}): {} {} {} {} {}".format(rl, cl, l_main.get_single_prob(rl,cl), c_main.get_single_prob(rl,cl,rc,cc), m_main.get_single_prob_m1(rl,cl,m1), m_main.get_single_prob_m2(rl,cl,m2),s_main.get_single_prob(sound_r,sound_c,rc,cc)))
+                            print("    Probs being multiplied for last location: ({}, {}): {} {} {} {} {}".format(rl, cl, l_main.get_single_prob(rl,cl), c_main.get_single_prob(rl,cl,rc,cc), m_main.get_single_prob_m1(rc,cc,m1), m_main.get_single_prob_m2(rc,cc,m2),s_main.get_single_prob(sound_r,sound_c,rc,cc)))
 
             board.print_board()
 
@@ -75,5 +76,5 @@ if __name__ == "__main__":
     # filename = input("Enter the filename: ")
     # debug = int(input("Enter debug boolean: 0 or 1"))
     debug = bool(int(input("Debug: 0 or 1 ")))
-    filename = "m1-input.txt"
+    filename = "m2-input.txt"
     grid = read_sensor_data(filename, debug)
